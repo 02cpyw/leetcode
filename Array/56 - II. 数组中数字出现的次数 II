@@ -1,0 +1,76 @@
+// class Solution {
+//     public int singleNumber(int[] nums) {
+        //方法一：AC有限状态自动机
+        //1.一个数字出现一次，其他数字都出现三次，比如说：3 3 3 1
+        /*2.画出二进制图为：
+            1 1
+            1 1
+            1 1
+            0 1     
+            我们把每个二进制位 1 的数量对 3 取余得到的结果对应的十进制数就是只出现一次的数字
+        ans 0 1 ==> 答案就是 1
+            每个二进制位 1 的数量对 3 取余的到的数可能是 0 1 2 ，总共三种状态，设为 00 01 10
+            运用数字逻辑的状态转移图：碰到 0 不变，碰到 1 跳到循环下一个状态
+            设三种状态表示的二进制数每个位记做： two one
+            根据状态转移图(先计算低位one，再根据新的one来推算高位two的值):
+            (1.推算one)
+                if two == 0
+                    if n == 0 
+                        one = one
+                    if n == 1
+                        one = ~one
+                if two == 1
+                    one = 0
+                
+                ==> one = one ^ n & ~two
+        */
+        // int one = 0;
+        // int two = 0;
+        // for(int n: nums) {
+        //     one = one ^ n & ~two;
+        //     two = two ^ n & ~one;
+        // }
+        // return one; 
+//     }
+// }
+
+
+/*
+方法二： 
+1.记录二进制每一位为 1 的数量
+2.对 3 取余
+3.还原出所表示的数字
+*/
+// class Solution {
+//     public int singleNumber(int[] nums) {
+//         int[] cnt = new int[32];
+//         for(int e : nums) {
+//             for(int i = 0; i < 32; i++) {
+//                 cnt[i] += (e & 1);
+//                 e >>= 1;
+//             }
+//         }
+//         int ans = 0 , index = 1;
+//         for(int i = 0; i < 32;i++) {
+//             cnt[i] %= 3;
+//             ans += cnt[i]*index;
+//             index <<= 1;
+//         }
+//         return ans;
+//     }
+// }
+
+//方法三（效率空间较差）：HashMap
+class Solution {
+    public int singleNumber(int[] nums) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int e: nums) {
+            if(!map.containsKey(e)) map.put(e,1);
+            else map.put(e,0);
+        }
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()) {
+            if(entry.getValue() == 1) return entry.getKey();
+        }
+        return -1;
+    }
+}
