@@ -1,0 +1,23 @@
+//维护两个 dp 数组
+
+class Solution {
+    public int[] constructArr(int[] a) {
+        int len = a.length;
+        int[] dp1 = new int[len + 2];
+        int[] dp2 = new int[len + 2];
+        dp1[0] = 1;
+        dp2[len+1] = 1;
+        for(int i = 1; i <= len-1; i++) {
+            dp1[i] = dp1[i-1]*a[i-1];
+        }
+        for(int i = len; i >= 2; i--) {
+            dp2[i] = dp2[i+1]*a[i-1];
+        }
+        int[] b = new int[len];
+        for(int i = 0; i < len; i++) {
+            b[i] = dp1[i] * dp2[i+2];
+            // System.out.println("b["+i+"] = dp1["+i+"] * dp2["+(i+2)+"] = " + b[i]);
+        }
+        return b;
+    }
+}
