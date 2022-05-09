@@ -1,0 +1,46 @@
+class MaxQueue {
+    /**
+        维护两个队列
+        res: 入队队列
+        max: 最大值队列
+            维护原则：设添加元素为 value
+                res.addLast(value);
+                if (!max.isEmpty()) {       //如果max为空直接添加即为最大值
+                    当value > max.peekLast(),弹出最后一个元素(max.removeLast())
+                    直到 value <= max.peekLast();
+                }
+                最后: max.addLast(value);
+     */
+    Deque<Integer> res;
+    Deque<Integer> max;
+    public MaxQueue() {
+        res = new LinkedList();
+        max = new LinkedList();
+    }
+    
+    public int max_value() {
+        if(!max.isEmpty()) {
+            return max.peekFirst();
+        }else {
+            return -1;
+        }
+    }
+    
+    public void push_back(int value) {
+        res.addLast(value);
+        while(!max.isEmpty() && value > max.peekLast()) {
+            max.removeLast();
+        }
+        max.addLast(value);
+    }
+    
+    public int pop_front() {
+        if(res.isEmpty()) return -1;
+        int ans = res.peekFirst();
+        if(ans == max.peekFirst()) {
+            max.removeFirst();
+        }
+        res.removeFirst();
+        return ans;
+    }
+}
