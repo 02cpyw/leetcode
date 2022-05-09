@@ -1,0 +1,36 @@
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        /**
+            1.相同的两个数字异或结果为0
+            2.只有两个数字（a,b）不是成对出现 ==> 所有数字异或结果（x）== 两个数字(a,b)的异或结果
+            3.因为a!=b ==> a 和 b 在二进制表示下至少有一位不相同
+            4.从低位到高位设第一位不相同的位数为x(x == 1)，其十进制表示为flag
+            5.计算出所有数字的异或结果记为：xor
+            6.用 & 运算符计算出 flag
+            7.把与 flag 进行 & 运算是否为零作为标准，将数分为两组: group1,group2
+                特别注意这里不能将运算结果是否为1作为标准，因为flag不一定为1，有可能在更高位
+            8.if( (nums[i] & flag) == 0 ) group1 ^= flag;
+              if( (nums[i] & flag) != 0) group2 ^= flag;
+              这样分组异或之后： group1 => 若干成对数 + a
+                               group2 => 若干成对数 + b
+             而成对数异或为0，所以异或之后，group1 = a
+                                         group2 = b
+            9.以数组方式输出答案即可
+         */
+        int x = 0;
+        for(int n: nums) {
+            x ^= n;
+        }
+        int flag = 1;    //二进制表示下，最低位为1时，十进制也为1
+        while((flag & x) == 0) {
+            flag <<= 1;
+        }
+        int group1 = 0;
+        int group2 = 0;
+        for(int n: nums) {
+            if((flag & n) == 0) group1 ^= n;
+            else group2 ^= n;
+        }
+        return new int[]{group1,group2};
+    }
+}
