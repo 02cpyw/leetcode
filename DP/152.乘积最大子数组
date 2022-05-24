@@ -1,0 +1,15 @@
+class Solution {
+    public int maxProduct(int[] nums) {
+        int res = nums[0];
+        int negmax = res;   //前缀积负的最大
+        int posmax = res;   //前缀积正的最大
+        for(int i = 1; i < nums.length; i++) {
+            int mx = posmax;
+            int mn = negmax;
+            posmax = Math.max(nums[i],Math.max(mn*nums[i],mx*nums[i]));
+            negmax = Math.min(nums[i],Math.min(mn*nums[i],mx*nums[i]));
+            res = Math.max(posmax,res);
+        }
+        return res;
+    }
+}
